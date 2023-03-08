@@ -93,7 +93,7 @@ docs = [
 ]
 
 # Create a new index
-index_name = 'searchml_ltr'
+index_name = 'searchml_ltr_toy'
 index_body = {
     'settings': {
         'index': {
@@ -128,7 +128,7 @@ for doc in docs:
     )
 
 # Verify they are in:
-print("We indexed:\n{}".format(client.cat.count(index_name, params={"v": "true"})))
+print("We indexed:\n{}".format(client.cat.count(index=index_name, params={"v": "true"})))
 
 #######################
 #
@@ -216,13 +216,13 @@ resp = requests.post(featureset_path, headers=headers, data=json.dumps(ltr_featu
 # Create a place to store our judgments
 class Judgment:
 
-    def __init__(self, query, doc_id, display_name, grade=0, features=[], query_str=None):
+    def __init__(self, query, doc_id, display_name, grade=0, features=None, query_str=None):
         self.query = query
         self.query_str = query_str
         self.doc_id = doc_id
         self.display_name = display_name
         self.grade = grade
-        self.features = features
+        self.features = features or []
 
     # Modified from https://github.com/o19s/elasticsearch-ltr-demo/blob/master/train/judgments.py
     def toXGBFormat(self):
